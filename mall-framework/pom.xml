@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>myMall</artifactId>
+        <groupId>com.hujian.mall</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>mall-common</module>
+    </modules>
+
+    <artifactId>mall-framework</artifactId>
+    <description>
+        用于存放一些公用框架，例如数据库，公共库等。
+        业务项目放在框架外
+    </description>
+    <packaging>pom</packaging>
+
+</project>
