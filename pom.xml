@@ -16,10 +16,14 @@
     </modules>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <java.version>1.8</java.version>
         <revision>1.0-SNAPSHOT</revision>
         <nacos.addr>localhost:8848</nacos.addr>
         <redis.ip>localhost</redis.ip>
+        <database.addr>1.15.45.245:443</database.addr>
         <mall-gateway.port>8888</mall-gateway.port>
         <mall-member.port>8877</mall-member.port>
     </properties>
@@ -36,5 +40,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+<!--    <build>-->
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <filtering>true</filtering>-->
+<!--            </resource>-->
+<!--        </resources>-->
+<!--    </build>-->
 
 </project>
