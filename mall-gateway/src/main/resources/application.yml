@@ -1,31 +1,6 @@
+server:
+  port: 8888
 spring:
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-  cloud:
-    nacos:
-      discovery:
-        server-addr: @nacos.addr@
-    gateway:
-      globalcors:
-        cors-configurations:
-          #路径映射
-          '[/**]':
-            #允许的来源
-            allowedOrigins: "*"
-            #允许的请求方法，现在一般是要禁止除了POST和GET之外的方法
-            allowedMethods:
-              - GET
-              - POST
-      routes:
-        - id: mall-member
-          #负载均衡的服务名
-          uri: lb://mall-member
-          predicates:
-            - Path=/ums/**
-  application:
-    name: mall-gateway
+  #web容器为响应式容器，防止web冲突
   main:
     web-application-type: reactive
-server:
-  port: @mall-gateway.port@

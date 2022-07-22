@@ -9,9 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+
     <modules>
         <module>mall-common</module>
     </modules>
+
+<!--    <properties>-->
+<!--        <revision>1.0-SNAPSHOT</revision>-->
+<!--    </properties>-->
 
     <artifactId>mall-framework</artifactId>
     <description>
