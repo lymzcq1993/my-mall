@@ -9,12 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mall-gateway</artifactId>
+    <artifactId>mall-authcenter</artifactId>
+    <name>${artifactId}</name>
     <description>
-        网关
+        认证中心
     </description>
 
     <dependencies>
+        <!--spring-mvc的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -32,11 +34,6 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
-        </dependency>
-
         <!--       spring cloud用于代替ribbon的组件-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -46,6 +43,13 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+
+        <!-- 认证框架       -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-authorization-server</artifactId>
+            <version>0.3.1</version>
         </dependency>
 
     </dependencies>

@@ -1,4 +1,4 @@
-package com.hujian.mall.controller;
+package com.hujian.mall.member.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.tags.Tags;

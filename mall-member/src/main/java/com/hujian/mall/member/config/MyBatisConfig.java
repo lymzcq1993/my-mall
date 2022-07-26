@@ -1,4 +1,4 @@
-package com.hujian.mall.config;
+package com.hujian.mall.member.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

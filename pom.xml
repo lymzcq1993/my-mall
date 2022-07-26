@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <version>2.6.7</version>
+        <version>2.6.9</version>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
     </parent>
@@ -20,6 +20,7 @@
         <module>mall-member</module>
         <module>mall-gateway</module>
         <module>mall-mbg</module>
+        <module>mall-authcenter</module>
     </modules>
 
     <properties>
