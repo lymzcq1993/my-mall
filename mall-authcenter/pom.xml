@@ -16,6 +16,15 @@
     </description>
 
     <dependencies>
+        <dependency>
+            <groupId>com.hujian.mall</groupId>
+            <artifactId>mall-mbg</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hujian.mall</groupId>
+            <artifactId>mall-common</artifactId>
+        </dependency>
         <!--spring-mvc的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,18 +49,18 @@
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
 
+        <!--  兼容nacos 配置中心使用bootstrap.yml      -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 
-        <!-- 认证框架       -->
+        <!-- Spring Authorization Server 认证服务器，已经包含了security的相关依赖       -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-authorization-server</artifactId>
             <version>0.3.1</version>
         </dependency>
-
     </dependencies>
 
 </project>

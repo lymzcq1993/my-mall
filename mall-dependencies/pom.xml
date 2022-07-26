@@ -149,6 +149,18 @@
                 <artifactId>spring-boot-admin-starter-client</artifactId> <!-- 实现 Spring Boot Admin Server 服务端 -->
                 <version>${spring-boot-admin.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.hujian.mall</groupId>
+                <artifactId>mall-mbg</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hujian.mall</groupId>
+                <artifactId>mall-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
