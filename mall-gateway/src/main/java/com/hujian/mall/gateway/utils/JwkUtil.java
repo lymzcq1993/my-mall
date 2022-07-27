@@ -3,26 +3,18 @@ package com.hujian.mall.gateway.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.signers.JWTSigner;
-import cn.hutool.jwt.signers.JWTSignerUtil;
 import com.hujian.mall.common.api.ResultCode;
 import com.hujian.mall.common.exception.GateWayException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.*;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import sun.security.rsa.RSAPublicKeyImpl;
 
-import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 
 /**
@@ -50,7 +42,7 @@ public class JwkUtil {
     /**
      * 请求头中的 token的开始
      */
-    private static final String AUTH_HEADER = "bearer ";
+    private static final String AUTH_HEADER = "Bearer ";
     public static JSONObject validateJwtToken(String authHeader, PublicKey publicKey) {
         String token =null ;
         try{
@@ -106,7 +98,7 @@ public class JwkUtil {
 
             log.error("远程调用认证服务器获取Token_Key失败:{}",e.getMessage());
 
-            throw new GateWayException(ResultCode.GET_TOKEN_KEY_ERROR);
+            throw new IllegalAccessError(e.getMessage());
         }
     }
 

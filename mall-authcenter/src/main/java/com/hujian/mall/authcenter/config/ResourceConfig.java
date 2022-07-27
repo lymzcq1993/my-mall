@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -23,9 +23,7 @@ public class ResourceConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
 //        // 将密码加密方式采用委托方式，默认以BCryptPasswordEncoder方式进行加密，兼容ldap,MD4,MD5等方式
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        //测试使用明文方式
-        return NoOpPasswordEncoder.getInstance();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 

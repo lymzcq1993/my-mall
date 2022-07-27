@@ -20,11 +20,6 @@
             <groupId>com.hujian.mall</groupId>
             <artifactId>mall-mbg</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.hujian.mall</groupId>
-            <artifactId>mall-common</artifactId>
-        </dependency>
         <!--spring-mvc的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

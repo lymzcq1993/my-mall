@@ -37,12 +37,14 @@ public class CustomErrorWebExceptionHandler extends DefaultErrorWebExceptionHand
         return RouterFunctions.route(RequestPredicates.all(), this::renderErrorResponse);
     }
 
+
+
     @Override
     protected Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         Throwable throwable = getError(request);
         return ServerResponse.status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(gateWayExceptionHandlerAdvice.handle(throwable)));
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(gateWayExceptionHandlerAdvice.handle(throwable)));
 
     }
 }

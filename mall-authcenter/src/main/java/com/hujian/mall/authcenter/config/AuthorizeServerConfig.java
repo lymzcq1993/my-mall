@@ -1,31 +1,12 @@
 package com.hujian.mall.authcenter.config;
 
-import cn.hutool.core.codec.Base64;
-import cn.hutool.core.util.HexUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.asymmetric.AsymmetricAlgorithm;
-import cn.hutool.crypto.asymmetric.RSA;
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.signers.AsymmetricJWTSigner;
-import cn.hutool.jwt.signers.JWTSigner;
-import cn.hutool.jwt.signers.JWTSignerUtil;
-import com.nimbusds.jose.Algorithm;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.crypto.RSASSASigner;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import org.bouncycastle.jcajce.provider.asymmetric.rsa.RSAUtil;
-import org.bouncycastle.jcajce.provider.keystore.PKCS12;
-import org.bouncycastle.jce.PKCS12Util;
-import org.checkerframework.checker.units.qual.K;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -33,12 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
@@ -46,18 +22,17 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
-import org.springframework.security.oauth2.server.authorization.token.*;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.security.*;
+import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,7 +40,8 @@ import java.util.UUID;
  * @author hujian
  * @since 2022-07-26 16:11
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@Slf4j
 public class AuthorizeServerConfig {
 //
 //    @Autowired
@@ -117,13 +93,11 @@ public class AuthorizeServerConfig {
 //            }
             context.getClaims().claims(
                     claims ->{
-                        claims.put("hujian",1111);
+                        claims.put("memberId",1111);
                     }
             );
         };
     }
-
-
 
     /**
      * 使用默认配置进行表单登入
@@ -207,8 +181,8 @@ public class AuthorizeServerConfig {
 //        KeyPair keyPair = generateRsaKey();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        System.out.println(publicKey);
-        System.out.println(privateKey);
+        log.debug("public key:{}",publicKey);
+        log.debug("private key:{}",privateKey);
         RSAKey rsaKey = new RSAKey.Builder(publicKey)
                 .privateKey(privateKey)
                 .keyID(UUID.randomUUID().toString())
@@ -247,32 +221,6 @@ public class AuthorizeServerConfig {
         RSAPublicKey aPublic = (RSAPublicKey) keyPair.getPublic();
         return keyPair;
     }
-
-    public static void main(String[] args) throws ParseException, JOSEException {
-//        JWT jwt = JWTUtil.parseToken("eyJraWQiOiI4YjU5M2VkOC01ODQwLTRmYjUtOTA4Zi1mODNiMDJhNjViYmQiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJodWppYW4iLCJhdWQiOiJtYWxsIiwibmJmIjoxNjU4OTAyOTAzLCJodWppYW4iOjExMTEsInNjb3BlIjpbIm1lc3NhZ2UucmVhZCJdLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODg4OSIsImV4cCI6MTY1ODkwODkwMywiaWF0IjoxNjU4OTAyOTAzfQ.iq62SFxUOJerarhy7jrU53oWXH465mFumEYQhZNa0TLhsTan67vvDEQUuCs7JMgx4XHw5PUQlqjzVR8dPi01Hed1SKcMjnGJtKeuCZ1CE_bPifvtLhgswFviCVUVmvYM8j-sE6TfUakI674e6FRkbjm-WfP86dT84fnvzFxpE6GXCOIYEKyjbZEOmPhWBLe3AOufM0JTLTLj0bmQAyj1-Znnw-8CGYr-CvOSiTmp-ineyao5f1GfiBQhAjOYGyzcKYxQRUJOI_a1xqRDkC7jyjAQSjtQ2Oinjfw7DjiOSlvtsBMHnH8ebE2VX76ZFVEseRHolxa6OBpJRyjGR2yqvg");
-        JWSObject jwsObject = JWSObject.parse("eyJraWQiOiI4YjU5M2VkOC01ODQwLTRmYjUtOTA4Zi1mODNiMDJhNjViYmQiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJodWppYW4iLCJhdWQiOiJtYWxsIiwibmJmIjoxNjU4OTAyOTAzLCJodWppYW4iOjExMTEsInNjb3BlIjpbIm1lc3NhZ2UucmVhZCJdLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODg4OSIsImV4cCI6MTY1ODkwODkwMywiaWF0IjoxNjU4OTAyOTAzfQ.iq62SFxUOJerarhy7jrU53oWXH465mFumEYQhZNa0TLhsTan67vvDEQUuCs7JMgx4XHw5PUQlqjzVR8dPi01Hed1SKcMjnGJtKeuCZ1CE_bPifvtLhgswFviCVUVmvYM8j-sE6TfUakI674e6FRkbjm-WfP86dT84fnvzFxpE6GXCOIYEKyjbZEOmPhWBLe3AOufM0JTLTLj0bmQAyj1-Znnw-8CGYr-CvOSiTmp-ineyao5f1GfiBQhAjOYGyzcKYxQRUJOI_a1xqRDkC7jyjAQSjtQ2Oinjfw7DjiOSlvtsBMHnH8ebE2VX76ZFVEseRHolxa6OBpJRyjGR2yqvg");
-        RSAKey rsaKey = RSAKey.parse("{\"kty\":\"RSA\",\"e\":\"AQAB\",\"kid\":\"8b593ed8-5840-4fb5-908f-f83b02a65bbd\",\"n\":\"kt1euQs5la91_tFbqqZMeUA82DyJTsJm8Yb7SUOwpXRc1x-VDOQCSPsoZx1c0u7ubvmpNpWoOXs-wawSTrJy1iq8u58X-TmEiwSfKz7QDGUG30BF6WU6qPkvswA4KgRqFZ68q-mlx3fPhBrQC9cOCJ1QQjmuTEgxhNTLvsadkTNVQ-9hFJEp6dowdwPwAFcojar4ciUy0T-A79Mvlzfy9rB4G3GD1feT1bZr_XyOBlz53yJFGmWjorwEANVehPKivjOq-DoYrzvKbzBYwoTKfMP0DAT0E4HdyIaBsen_jnwm9_RiCUWkNkJZuI7sLGLuClWGpUY5wJIu57UQPwfBbw\"}");
-//        JWTSigner signer = JWTSignerUtil.createSigner(rsaKey.getKeyID(), rsaKey.toPublicKey());
-        RSASSAVerifier verifier = new RSASSAVerifier(rsaKey.toRSAPublicKey());
-//        boolean verify = jwsObject.verify(verifier);
-        boolean verify = jwsObject.verify(verifier);
-        System.out.println(verify);
-//        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
-//                new ClassPathResource("jwt.jks")
-//                ,"123456".toCharArray()
-//        );
-//        KeyPair keyPair = keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
-//        RSAPublicKey aPublic = (RSAPublicKey) keyPair.getPublic();
-//        RSAPrivateKey aPrivate = (RSAPrivateKey)keyPair.getPrivate();
-//        RSAKey rsaKey = new RSAKey.Builder(aPublic)
-//                .privateKey(aPrivate)
-//                .keyID(UUID.randomUUID().toString())
-//                .build();
-//
-//        System.out.println(Base64.encode(aPublic.getEncoded()));
-//        System.out.println(Base64.encode(aPrivate.getEncoded()));
-    }
-
 
     /**
      * ProviderSettings配置 Spring Authorization Server的实例

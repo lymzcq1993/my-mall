@@ -31,36 +31,35 @@ import java.util.List;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @ConditionalOnClass(WebFluxConfigurer.class)
 @AutoConfigureBefore(WebFluxAutoConfiguration.class)
-@EnableConfigurationProperties({ServerProperties.class, WebProperties.Resources.class})
+@EnableConfigurationProperties({ServerProperties.class,WebProperties.class})
 public class ExceptionAutoConfiguration {
 
     private ServerProperties serverProperties;
 
     private ApplicationContext applicationContext;
 
-    private WebProperties.Resources resources;
+    private WebProperties webProperties;
 
     private List<ViewResolver> viewResolvers;
 
     private ServerCodecConfigurer serverCodecConfigurer;
 
     public ExceptionAutoConfiguration(ServerProperties serverProperties,
-                                      WebProperties.Resources resources,
                                       ObjectProvider<List<ViewResolver>> viewResolversProvider,
                                       ServerCodecConfigurer serverCodecConfigurer,
-                                      ApplicationContext applicationContext) {
+                                      ApplicationContext applicationContext, WebProperties webProperties) {
         this.serverProperties = serverProperties;
         this.applicationContext = applicationContext;
-        this.resources = resources;
         this.viewResolvers = viewResolversProvider
                 .getIfAvailable(() -> Collections.emptyList());
         this.serverCodecConfigurer = serverCodecConfigurer;
+        this.webProperties = webProperties;
     }
 
     @Bean
     public ErrorWebExceptionHandler errorWebExceptionHandler(ErrorAttributes errorAttributes) {
         DefaultErrorWebExceptionHandler exceptionHandler = new CustomErrorWebExceptionHandler(
-                errorAttributes, this.resources,
+                errorAttributes, webProperties.getResources(),
                 this.serverProperties.getError(), this.applicationContext);
         exceptionHandler.setViewResolvers(this.viewResolvers);
         exceptionHandler.setMessageWriters(this.serverCodecConfigurer.getWriters());

@@ -1,6 +1,8 @@
 package com.hujian.mall.authcenter.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.hujian.mall.mapper.ums.mapper.UmsAdminMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +20,8 @@ import java.util.Set;
 */
 @Component
 public class MallUserDetailService implements UserDetailsService {
+    @Autowired
+    UmsAdminMapper umsAdminMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (StrUtil.equals(username,"admin")){
