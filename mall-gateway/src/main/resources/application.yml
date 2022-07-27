@@ -4,3 +4,8 @@ spring:
   #web容器为响应式容器，防止web冲突
   main:
     web-application-type: reactive
+mall:
+  gateway:
+    should-skip-urls:
+      - /oauth2/**
+#      - /sso/**

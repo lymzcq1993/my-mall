@@ -20,6 +20,22 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.hujian.mall</groupId>
+            <artifactId>mall-common</artifactId>
+        </dependency>
+
+        <!-- yml中自动显示自定义配置        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+        </dependency>
         <!--  注册中心      -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
