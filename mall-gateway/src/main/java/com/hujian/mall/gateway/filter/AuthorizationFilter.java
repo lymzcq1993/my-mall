@@ -1,5 +1,6 @@
 package com.hujian.mall.gateway.filter;
 
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONObject;
 import com.hujian.mall.common.api.ResultCode;
 import com.hujian.mall.common.exception.GateWayException;
@@ -20,8 +21,10 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.security.PublicKey;
 
 /**
@@ -64,6 +67,8 @@ public class AuthorizationFilter implements GlobalFilter, InitializingBean {
             throw new GateWayException(ResultCode.AUTHORIZATION_HEADER_IS_EMPTY);
         }
         //4.校验jwk 若jwt不对或者超时都会抛出异常
+//        URI uri = URI.create("http://127.0.0.1:8889/oauth2/authorize?client_id=mall&response_type=code&scope=openid&redirect_uri=http://www.baidu.com");
+//        exchange.getResponse().getHeaders().setLocation(uri);
         JSONObject claimJson = JwkUtil.validateJwtToken(authHeader, publicKey);
 
         //5.解析jwt，将用户信息传递到header中

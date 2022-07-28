@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 
@@ -24,7 +25,9 @@ public class MyBatisPlusGenerate {
      * 多个用逗号分割
      */
     public static String TABLE_NAMES = "ums_admin";
-    public static String OUTPUT_DIR = "D:/programes";
+    public static String OUTPUT_DIR = "D:/programes/oracle";
+
+    public static String MAPPER_PATH = OUTPUT_DIR+"/mapper";
 
     /**
      * 数据源配置
@@ -41,7 +44,10 @@ public class MyBatisPlusGenerate {
                 // 全局配置
                 .globalConfig((scanner, builder) -> builder.author(AUTHOR).fileOverride().enableSwagger().outputDir(OUTPUT_DIR))
                 // 包配置
-                .packageConfig((scanner, builder) -> builder.parent(PACKAGE_NAME).moduleName(MODULE_NAME))
+                .packageConfig((scanner, builder) -> builder
+                        .parent(PACKAGE_NAME)
+                        .moduleName(MODULE_NAME)
+                        .pathInfo(Collections.singletonMap(OutputFile.xml,MAPPER_PATH)))
                 // 策略配置
                 .strategyConfig((scanner, builder) -> builder.addInclude(TABLE_NAMES)
                         .controllerBuilder().enableRestStyle().enableHyphenStyle()
@@ -50,7 +56,7 @@ public class MyBatisPlusGenerate {
                                 new Column("update_time", FieldFill.INSERT_UPDATE)
                         )
                         .idType(IdType.AUTO)
-                        .serviceBuilder().formatServiceFileName("%Service").formatServiceImplFileName("%ServiceImpl")
+                        .serviceBuilder().convertServiceFileName(entityName -> entityName+"Service")
                         .build())
 
                 //    模板引擎配置，默认 Velocity 可选模板引擎 Beetl 或 Freemarker

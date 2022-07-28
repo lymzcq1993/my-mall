@@ -1,4 +1,4 @@
-package com.hujian.mall;
+package com.hujian.mall.member;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

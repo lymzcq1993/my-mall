@@ -32,7 +32,7 @@ server:
 ##    timeout: 3000ms # 连接超时时间（毫秒）
 #  #配置中心滚环境隔离
 #  profiles:
-#    active: dev
+#    active: @activeProfile@
 ##  mvc:
 ##    pathmatch:
 ##      matching-strategy: ant_path_matcher

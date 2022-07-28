@@ -3,6 +3,7 @@ package com.hujian.mall.gateway.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.hutool.jwt.JWTUtil;
 import com.hujian.mall.common.api.ResultCode;
 import com.hujian.mall.common.exception.GateWayException;
 import com.nimbusds.jose.JWSObject;

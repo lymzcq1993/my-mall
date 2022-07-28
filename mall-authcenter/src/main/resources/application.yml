@@ -6,3 +6,9 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://127.0.0.1:8889
+mall:
+  jwt:
+    jks-path: jwt.jks
+    key-pair-alias: jwt
+    key-pair-secret: 123456
+    key-pair-store-secret: 123456

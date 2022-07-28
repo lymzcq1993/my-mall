@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mall-member
+    name: mall-admin
   profiles:
     active: @activeProfile@
   cloud:

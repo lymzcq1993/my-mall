@@ -1,0 +1,2 @@
+server:
+  port: @mall-admin.port@

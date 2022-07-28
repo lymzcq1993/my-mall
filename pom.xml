@@ -21,6 +21,7 @@
         <module>mall-gateway</module>
         <module>mall-mbg</module>
         <module>mall-authcenter</module>
+        <module>mall-admin</module>
     </modules>
 
     <properties>
@@ -30,6 +31,8 @@
         <database.addr>1.15.45.245:13306</database.addr>
         <mall-gateway.port>8888</mall-gateway.port>
         <mall-member.port>8877</mall-member.port>
+        <mall-admin.port>8866</mall-admin.port>
+        <activeProfile>dev</activeProfile>
     </properties>
 
     <dependencyManagement>

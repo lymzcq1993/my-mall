@@ -1,5 +1,8 @@
 package com.hujian.mall.authcenter.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hujian.mall.authcenter.domain.MemberDetail;
+import com.hujian.mall.authcenter.properties.JwtCAProperties;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -7,6 +10,8 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -15,10 +20,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
-import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
-import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.authentication.OAuth2AuthenticationContext;
+import org.springframework.security.oauth2.server.authorization.*;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
@@ -42,10 +47,11 @@ import java.util.UUID;
  */
 @Configuration(proxyBeanMethods = false)
 @Slf4j
+@EnableConfigurationProperties(JwtCAProperties.class)
 public class AuthorizeServerConfig {
-//
-//    @Autowired
-//    MallUserDetailService mallUserDetailService;
+    @Autowired
+    private JwtCAProperties jwtCAProperties;
+
     /**
      * 重定向设置
      * @return
@@ -91,9 +97,10 @@ public class AuthorizeServerConfig {
 //                context.getClaims().claims(claims ->
 //                        claims.putAll(userInfo.getClaims()));
 //            }
+            MemberDetail user = (MemberDetail) context.getPrincipal().getPrincipal();
             context.getClaims().claims(
                     claims ->{
-                        claims.put("memberId",1111);
+                        claims.put("memberId",user.getUmsAdmin().getId());
                     }
             );
         };
@@ -121,8 +128,14 @@ public class AuthorizeServerConfig {
      * 脚本在org/springframework/security/oauth2/server/authorization/oauth2-authorization-schema.sql
      */
     @Bean
-    public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository) {
-        return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+    public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate
+            , RegisteredClientRepository registeredClientRepository
+            , ObjectMapper objectMapper) {
+        JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper rowMapper = new JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper(registeredClientRepository);
+        rowMapper.setObjectMapper(objectMapper);
+        JdbcOAuth2AuthorizationService auth2AuthorizationService = new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+        auth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
+        return auth2AuthorizationService;
     }
 
     /**
@@ -214,10 +227,11 @@ public class AuthorizeServerConfig {
     @Bean
     public KeyPair keyPair() throws FileNotFoundException {
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
-                new ClassPathResource("jwt.jks")
-                ,"123456".toCharArray()
+                new ClassPathResource(jwtCAProperties.getJksPath())
+                ,jwtCAProperties.getKeyPairStoreSecret().toCharArray()
         );
-        KeyPair keyPair = keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
+        KeyPair keyPair = keyStoreKeyFactory.getKeyPair(jwtCAProperties.getKeyPairAlias()
+                , jwtCAProperties.getKeyPairSecret().toCharArray());
         RSAPublicKey aPublic = (RSAPublicKey) keyPair.getPublic();
         return keyPair;
     }

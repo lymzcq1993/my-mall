@@ -2,6 +2,7 @@ package com.hujian.mall.mapper.ums.mapper;
 
 import com.hujian.mall.mapper.ums.entity.UmsAdmin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
