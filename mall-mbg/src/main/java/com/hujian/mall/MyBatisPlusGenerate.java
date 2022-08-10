@@ -24,7 +24,7 @@ public class MyBatisPlusGenerate {
     /**
      * 多个用逗号分割
      */
-    public static String TABLE_NAMES = "ums_admin";
+    public static String TABLE_NAMES = "ums_member";
     public static String OUTPUT_DIR = "D:/programes/oracle";
 
     public static String MAPPER_PATH = OUTPUT_DIR+"/mapper";
@@ -55,6 +55,7 @@ public class MyBatisPlusGenerate {
                                 new Column("create_time", FieldFill.INSERT),
                                 new Column("update_time", FieldFill.INSERT_UPDATE)
                         )
+                        .enableTableFieldAnnotation()
                         .idType(IdType.AUTO)
                         .serviceBuilder().convertServiceFileName(entityName -> entityName+"Service")
                         .build())

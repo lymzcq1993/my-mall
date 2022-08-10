@@ -9,16 +9,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mall-member</artifactId>
-
-<!--    <properties>-->
-<!--        <nacos.addr>localhost:8848</nacos.addr>-->
-<!--    </properties>-->
+    <artifactId>mall-order-sharding</artifactId>
+    <description>
+        分库分表订单表
+    </description>
 
     <dependencies>
+        <!-- 数据库相关的依赖,这里去掉 druid-spring-boot-starter的原因是直接使用starter集成shardingSphere启动会报错
+             需要直接引用连接池-->
         <dependency>
             <groupId>com.hujian.mall</groupId>
             <artifactId>mall-mbg</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>druid-spring-boot-starter</artifactId>
+                    <groupId>com.alibaba</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--  注册中心      -->
@@ -51,10 +58,10 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-security</artifactId>-->
+        <!--        </dependency>-->
 
         <!--spring-mvc的依赖-->
         <dependency>
@@ -68,9 +75,15 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.11</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
+
 </project>

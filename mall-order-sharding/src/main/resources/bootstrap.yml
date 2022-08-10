@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: mall-order-sharding
+  profiles:
+    active: @activeProfile@
+  cloud:
+    #dataid = ${prefix}-${spring.profiles.active}.${file-extension}
+    nacos:
+      config:
+        server-addr: @nacos.addr@
+        file-extension: yml
+        #引入公共配置，redis，数据库等
+        shared-configs:
+          - data-id: mall-common.yml
+            group: MALL_GROUP

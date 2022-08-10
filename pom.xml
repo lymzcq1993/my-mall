@@ -23,6 +23,8 @@
         <module>mall-authcenter</module>
         <module>mall-admin</module>
         <module>mall-search</module>
+        <module>mall-secondKill</module>
+        <module>mall-order-sharding</module>
     </modules>
 
     <properties>
@@ -32,7 +34,9 @@
         <database.addr>1.15.45.245:13306</database.addr>
         <mall-gateway.port>8888</mall-gateway.port>
         <mall-member.port>8877</mall-member.port>
+        <mall-order-sharding.port>8833</mall-order-sharding.port>
         <mall-admin.port>8866</mall-admin.port>
+        <mall-secondKill.port>8855</mall-secondKill.port>
         <activeProfile>dev</activeProfile>
     </properties>
 

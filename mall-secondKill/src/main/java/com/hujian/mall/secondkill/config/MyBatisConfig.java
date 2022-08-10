@@ -1,4 +1,4 @@
-package com.hujian.mall.member.config;
+package com.hujian.mall.secondkill.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @since 2022-07-21 15:49
  */
 @EnableTransactionManagement
-@MapperScan({"com.hujian.mall.member.dao"})
+@MapperScan({"com.hujian.mall.dao"})
 @Configuration(proxyBeanMethods = false)
 public class MyBatisConfig {
     /**
