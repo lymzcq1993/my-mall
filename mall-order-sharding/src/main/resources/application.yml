@@ -57,11 +57,14 @@ spring:
             actual-data-nodes: ds$->{0..1}.ums_member_$->{0..1}
             #分库策略
             database-strategy:
+#              complex:
+#                sharding-columns: id,username
+#                sharding-algorithm-name: custom-complex
               standard:
                 # 分片列名称
                 sharding-column: id
                 # 分片算法名称，与下方配置对应
-                sharding-algorithm-name: member-ds-inline
+                sharding-algorithm-name: custom-shared
             #分表策略
             table-strategy:
               standard:
@@ -84,16 +87,25 @@ spring:
               worker-id: 001
         sharding-algorithms:
           member-table-inline:
-            type: COMPLEX
+            type: INLINE
             props:
 #              #分片算法的行表达式
-#              algorithm-expression: ums_member_$->{id % 2}
-               algorithm-class-name: com.hujian.mall.order.sharding.algorithm.MyComplexAlgorithm
+              algorithm-expression: ums_member_$->{id % 2}
           member-ds-inline:
             type: INLINE
             props:
               #分片算法的行表达式
               algorithm-expression: ds$->{id % 2}
+          #自定义分片
+          custom-shared:
+            type: CUSTOM_SHARED
+            props:
+              my-name: "hujian"
+          #自定义复杂分片
+          custom-complex:
+            type: CUSTOM_COMPLEX
+            props:
+              my-name: "hujian"
     props:
       # 日志显示具体的SQL
       sql-show: true
